@@ -2,12 +2,15 @@ package ooo.foooooooooooo.velocitydiscord;
 
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
+import net.kyori.adventure.text.Component;
 import ooo.foooooooooooo.velocitydiscord.discord.Discord;
 
 import java.util.HashMap;
@@ -25,6 +28,17 @@ public class VelocityListener {
 
   public VelocityListener(Discord discord) {
     this.discord = discord;
+  }
+
+  @Subscribe
+  public void onLogin(LoginEvent event) {
+    Player player = event.getPlayer();
+    String username = player.getUsername();
+    String code = UUID.randomUUID().toString().substring(0, 3).toUpperCase();
+
+    discord.getPendingLinkCodes().put(code, username);
+
+    player.disconnect(Component.text("Welcome! Use this code to link your account:\n" + code));
   }
 
   @Subscribe
