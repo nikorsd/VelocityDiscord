@@ -21,6 +21,7 @@ import ooo.foooooooooooo.velocitydiscord.VelocityDiscord;
 import ooo.foooooooooooo.velocitydiscord.config.ServerConfig;
 import ooo.foooooooooooo.velocitydiscord.config.definitions.WebhookConfig;
 import ooo.foooooooooooo.velocitydiscord.discord.commands.ICommand;
+import ooo.foooooooooooo.velocitydiscord.discord.commands.LinkCommand;
 import ooo.foooooooooooo.velocitydiscord.discord.commands.ListCommand;
 import ooo.foooooooooooo.velocitydiscord.discord.message.IQueuedMessage;
 import ooo.foooooooooooo.velocitydiscord.util.StringTemplate;
@@ -31,6 +32,7 @@ import java.lang.management.ManagementFactory;
 import java.util.*;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,9 @@ public class Discord extends ListenerAdapter {
   private static final Pattern RawPingPattern = Pattern.compile("<@(?<ping>[!&]?\\d+)>");
 
   private final MessageListener messageListener;
+
+  // Store pending Discord link codes
+  private final ConcurrentHashMap<String, String> pendingLinks = new ConcurrentHashMap<>();
 
   private final Map<String, ICommand> commands = new HashMap<>();
   private final HashMap<String, List<String>> mentionCompletions = new HashMap<>();
@@ -68,6 +73,7 @@ public class Discord extends ListenerAdapter {
   public void onConfigReload() {
     if (VelocityDiscord.CONFIG.global.discord.commands.list.enabled) {
       this.commands.put(ListCommand.COMMAND_NAME, new ListCommand());
+      this.commands.put(LinkCommand.COMMAND_NAME, new LinkCommand(this));
     }
 
     if (!VelocityDiscord.CONFIG.global.discord.token.equals(this.lastToken)) {
@@ -737,6 +743,8 @@ public class Discord extends ListenerAdapter {
   private Channels getServerChannels(String server) {
     return this.serverChannels.getOrDefault(server, this.defaultChannels);
   }
+
+  public ConcurrentHashMap<String, String> getPendingLinkCodes() {return pendingLinks;}
 
   private record QueuedWebhookMessage(String server, MessageCategory type, MessageCreateData message, String avatar,
                                       String username) implements IQueuedMessage {
