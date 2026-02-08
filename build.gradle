@@ -10,15 +10,21 @@ configurations {
 }
 
 repositories {
-  maven {
-    name = 'papermc'
-    url = 'https://repo.papermc.io/repository/maven-public/'
-  }
-  maven {
-    name = 'jitpack'
-    url = 'https://jitpack.io'
-  }
+  mavenLocal()
+  mavenCentral()
+  maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+  maven { url = 'https://jitpack.io' }
 }
+
+shadowJar {
+  archiveClassifier.set("all")
+
+  // Relocate packages to avoid conflicts
+  relocate 'net.dv8tion.jda', 'shaded.net.dv8tion.jda'
+  relocate 'okhttp3', 'shaded.okhttp3'
+  relocate 'com.fasterxml', 'shaded.com.fasterxml'
+}
+
 
 dependencies {
   compileOnly("com.velocitypowered:velocity-api:$velocity_version") {
@@ -36,6 +42,7 @@ dependencies {
 
   implementation "com.electronwill.night-config:toml:$night_config_version"
   implementation "com.github.unilock:yeplib:$yeplib_version"
+  implementation 'net.dv8tion:JDA:6.3.0'
 
   testImplementation platform("org.junit:junit-bom:$junit_version")
   testImplementation 'org.junit.jupiter:junit-jupiter'
