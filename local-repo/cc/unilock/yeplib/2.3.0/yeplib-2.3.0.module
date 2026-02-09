@@ -1,0 +1,80 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "cc.unilock",
+    "module": "yeplib",
+    "version": "2.3.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "yeplib-2.3.0.jar",
+          "url": "yeplib-2.3.0.jar",
+          "size": 8322,
+          "sha512": "2875df0d02b3274f5e3cc56a6e49f222df3b07451a1b50fd61d3f8ac5a5398ff677a9d4a674b95295351de9431bdcc1877c13d5ffb1db6eafca6848b31027ede",
+          "sha256": "b2255890e2d140e6e273b9a209be3086ba45ccf896e0882a7c1eb3308e93cd08",
+          "sha1": "a22017c9ff075036afdf75fe5f036b6e06c5983d",
+          "md5": "3312b5d83b21ae6b7955881c46251374"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "yeplib-2.3.0.jar",
+          "url": "yeplib-2.3.0.jar",
+          "size": 8322,
+          "sha512": "2875df0d02b3274f5e3cc56a6e49f222df3b07451a1b50fd61d3f8ac5a5398ff677a9d4a674b95295351de9431bdcc1877c13d5ffb1db6eafca6848b31027ede",
+          "sha256": "b2255890e2d140e6e273b9a209be3086ba45ccf896e0882a7c1eb3308e93cd08",
+          "sha1": "a22017c9ff075036afdf75fe5f036b6e06c5983d",
+          "md5": "3312b5d83b21ae6b7955881c46251374"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "yeplib-2.3.0-sources.jar",
+          "url": "yeplib-2.3.0-sources.jar",
+          "size": 4522,
+          "sha512": "f64e362f84fbae29addf86cddc2b2e242cf91c311d8444e99a930291ca6cf97f9c9c9b83f4ffb8ccf4bb7e504a752da63de65cc430773c60f4b6747d0b7e58cf",
+          "sha256": "f269aac3957ec08cb933586445ce309e4ab114a37af653ec528e0d0fa7144c08",
+          "sha1": "9f9f7f66b2a30562c164ffb3a64bc3f50326931d",
+          "md5": "590308f64872aca5ce515f749d42a166"
+        }
+      ]
+    }
+  ]
+}
