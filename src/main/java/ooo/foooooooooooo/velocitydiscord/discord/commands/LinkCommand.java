@@ -1,18 +1,17 @@
 package ooo.foooooooooooo.velocitydiscord.discord.commands;
 
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
-import ooo.foooooooooooo.velocitydiscord.VelocityListener;
 import ooo.foooooooooooo.velocitydiscord.discord.Discord;
+import ooo.foooooooooooo.velocitydiscord.discord.UserLinkData;
 
 import java.util.Objects;
 
 public class LinkCommand implements ICommand {
   public static final String COMMAND_NAME = "link";
 
-  private Discord discord;
+  private final Discord discord;
 
   public LinkCommand(Discord discord) {
     this.discord = discord;
@@ -35,12 +34,18 @@ public class LinkCommand implements ICommand {
 
     String code = codeParam.getAsString();
 
-    if (!discord.getPendingLinkCodes().get(code).isEmpty()) {
-      interaction.getMember().modifyNickname(discord.getPendingLinkCodes().get(code));
-      discord.getPendingLinkCodes().remove(code);
+    if (discord.getPendingLinkCodes().get(code) != null) {
+      System.out.println(interaction.getMember().getId() + " " + discord.getPendingLinkCodes().get(code));
+      Objects.requireNonNull(interaction.getGuild()).modifyNickname(interaction.getMember(), discord.getPendingLinkCodes().get(code)).queue();
 
-      System.out.println("Linked Discord user " + interaction.getUser().getAsTag() + " to code: " + code);
+      try {
+        UserLinkData.save(interaction.getMember().getId(), discord.getPendingLinkCodes().get(code));
+      }
+      catch (Exception e) {System.out.println("Error saving user link data");}
+
+      System.out.println("Linked Discord user " + interaction.getUser().getAsTag() + " to Minecraft username: " + discord.getPendingLinkCodes().get(code));
       interaction.reply("Successfully linked your account with the code: " + code).setEphemeral(true).queue();
+      discord.getPendingLinkCodes().remove(code);
     } else {
       interaction.reply("Invalid code. Please make sure you provide a valid code.").setEphemeral(true).queue();
       System.out.println(discord.getPendingLinkCodes());
