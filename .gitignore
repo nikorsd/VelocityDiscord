@@ -1,6 +1,6 @@
 .idea/*
 !.idea/velocity-discord.iml
-.run
+.run/*
 
 .vscode
 .gradle/
