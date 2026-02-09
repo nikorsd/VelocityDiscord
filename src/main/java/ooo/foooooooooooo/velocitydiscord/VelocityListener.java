@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import com.velocitypowered.api.proxy.server.ServerPing;
 import net.kyori.adventure.text.Component;
 import ooo.foooooooooooo.velocitydiscord.discord.Discord;
+import ooo.foooooooooooo.velocitydiscord.discord.UserLinkData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,11 +35,23 @@ public class VelocityListener {
   public void onLogin(LoginEvent event) {
     Player player = event.getPlayer();
     String username = player.getUsername();
-    String code = UUID.randomUUID().toString().substring(0, 3).toUpperCase();
 
-    discord.getPendingLinkCodes().put(code, username);
+    if (UserLinkData.getDiscordUserID(username) == null) {
+      String code;
+      // If the user has active codes use that instead of generating a new code
+      if (discord.getPendingLinkCodes().containsValue(username)) {
+        code = discord.getPendingLinkCodes().entrySet().stream()
+          .filter(e -> e.getValue().equalsIgnoreCase(username))
+          .map(Map.Entry::getKey)
+          .findFirst()
+          .orElse(null);
+      } else {
+        code = UUID.randomUUID().toString().substring(0, 3).toUpperCase();
+        discord.getPendingLinkCodes().put(code, username);
+      }
 
-    player.disconnect(Component.text("Welcome! Use this code to link your account:\n" + code));
+      player.disconnect(Component.text("Welcome! Use this code to link your account:\n" + code));
+    }
   }
 
   @Subscribe
@@ -93,6 +106,8 @@ public class VelocityListener {
 
   @Subscribe
   public void onDisconnect(DisconnectEvent event) {
+    if (UserLinkData.getDiscordUserID(event.getPlayer().getUsername()) == null) {return;}
+
     updatePlayerCount();
 
     var currentServer = event.getPlayer().getCurrentServer();
